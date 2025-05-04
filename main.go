@@ -4,6 +4,7 @@ import (
 	"gartifacts/internal"
 	"github.com/thestuckster/gopherfacts/pkg/clients"
 	"github.com/thestuckster/gopherfacts/pkg/items"
+	"github.com/thestuckster/gopherfacts/pkg/maps"
 	"log"
 )
 
@@ -17,6 +18,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	tilesByResourceCode, err := fetchAllMapInformation()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(len(tilesByResourceCode))
 
 	//debug
 	woodStaff := allItemsByName["Wooden Staff"]
@@ -50,4 +57,24 @@ func fetchAllItemInformation() (map[string]items.ItemMetaData, map[string]items.
 	}
 
 	return itemsByName, itemsByCode, nil
+}
+
+func fetchAllMapInformation() (tilesByResourceCode map[string][]maps.MapData, err error) {
+	log.Println("Fetching all map information")
+	mapTiles, err := maps.GetAllMapData()
+	if err != nil {
+		return nil, err
+	}
+
+	tilesByResourceCode = make(map[string][]maps.MapData)
+	for _, tile := range mapTiles {
+		resource := tile.Content.Code
+		if _, ok := tilesByResourceCode[resource]; !ok {
+			tilesByResourceCode[resource] = []maps.MapData{tile}
+		} else {
+			tilesByResourceCode[resource] = append(tilesByResourceCode[resource], tile)
+		}
+	}
+
+	return tilesByResourceCode, err
 }
