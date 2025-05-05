@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/joho/godotenv v1.5.1
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
-	github.com/thestuckster/gopherfacts v0.1.3
+	github.com/thestuckster/gopherfacts v0.2.0
 )
 
 require (

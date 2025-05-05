@@ -14,30 +14,35 @@ func main() {
 
 	mainCharacter := "Main"
 
-	allItemsByName, _, err := fetchAllItemInformation()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tilesByResourceCode, err := fetchAllMapInformation()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(len(tilesByResourceCode))
-
-	//debug
-	woodStaff := allItemsByName["Wooden Staff"]
-	log.Println(woodStaff)
+	//allItemsByName, _, err := fetchAllItemInformation()
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//tilesByResourceCode, err := fetchAllMapInformation()
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//log.Println(len(tilesByResourceCode))
+	//
+	////debug
+	//woodStaff := allItemsByName["Wooden Staff"]
+	//log.Println(woodStaff)
+	//
 
 	///ensure env vars are set
 	internal.LoadEnvironment()
 	apiToken := internal.GetEnvVar(artifactsToken)
 
 	client := clients.NewClient(&apiToken)
-	_, err = client.EasyClient.MoveToChickens(mainCharacter)
+	_, err := client.EasyClient.MoveToChickens(mainCharacter)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+}
+
+func chickenLoop(characterName string, client *clients.GopherFactClient) {
 
 }
 
