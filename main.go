@@ -6,12 +6,13 @@ import (
 	"github.com/thestuckster/gopherfacts/pkg/items"
 	"github.com/thestuckster/gopherfacts/pkg/maps"
 	"log"
+	"sync"
 )
 
 const artifactsToken = "ARTIFACTS_TOKEN"
 
 func main() {
-
+	log.Println("Starting gopherfacts")
 	mainCharacter := "Main"
 
 	//allItemsByName, _, err := fetchAllItemInformation()
@@ -35,11 +36,14 @@ func main() {
 	apiToken := internal.GetEnvVar(artifactsToken)
 
 	client := clients.NewClient(&apiToken)
-	_, err := client.EasyClient.MoveToChickens(mainCharacter)
-	if err != nil {
-		log.Fatal(err)
-	}
 
+	boolChan := make(chan bool)
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	log.Println("Starting chicken loop")
+	go internal.ChickenLoop(mainCharacter, client, boolChan, &wg)
+	wg.Wait()
 }
 
 func chickenLoop(characterName string, client *clients.GopherFactClient) {
