@@ -94,5 +94,13 @@ func (n *ItemPlanNode) BuildCraftingOrder() []*ItemPlanNode {
 		}
 	}
 
+	return reverseSlice(result)
+}
+
+func reverseSlice[T any](s []T) []T {
+	result := make([]T, len(s))
+	for i, j := 0, len(s)-1; j >= 0; i, j = i+1, j-1 {
+		result[i] = s[j]
+	}
 	return result
 }

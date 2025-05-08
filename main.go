@@ -2,6 +2,7 @@ package main
 
 import (
 	"gartifacts/internal"
+	"gartifacts/internal/tasks"
 	"github.com/thestuckster/gopherfacts/pkg/clients"
 	"github.com/thestuckster/gopherfacts/pkg/items"
 	"github.com/thestuckster/gopherfacts/pkg/maps"
@@ -12,14 +13,14 @@ import (
 const artifactsToken = "ARTIFACTS_TOKEN"
 
 func main() {
-	log.Println("Starting gopherfacts")
+	log.Println("Starting gartifacts")
 	mainCharacter := "Main"
 
-	//allItemsByName, _, err := fetchAllItemInformation()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
+	allItemsByName, allItemsByCode, err := fetchAllItemInformation()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	//tilesByResourceCode, err := fetchAllMapInformation()
 	//if err != nil {
 	//	log.Fatal(err)
@@ -37,17 +38,15 @@ func main() {
 
 	client := clients.NewClient(&apiToken)
 
-	boolChan := make(chan bool)
+	//boolChan := make(chan bool)
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	log.Println("Starting chicken loop")
-	go internal.ChickenLoop(mainCharacter, client, boolChan, &wg)
+	//go internal.ChickenLoop(mainCharacter, client, boolChan, &wg)
+	tasks := tasks.BuildTaskQueue(mainCharacter, "Copper Dagger", allItemsByName, allItemsByCode, client)
+	log.Println(tasks)
 	wg.Wait()
-}
-
-func chickenLoop(characterName string, client *clients.GopherFactClient) {
-
 }
 
 func fetchAllItemInformation() (map[string]items.ItemMetaData, map[string]items.ItemMetaData, error) {
